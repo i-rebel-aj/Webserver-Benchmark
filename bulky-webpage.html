@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Bulky Webpage</title>
+    
+    <!-- Include Bootstrap CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        /* Custom styling for carousel controls */
+        .carousel-control-prev-icon,
+        .carousel-control-next-icon {
+            background-color: #000000;
+        }
+        
+        .carousel-control-prev,
+        .carousel-control-next {
+            width: 5%;
+        }
+        
+        /* Custom styling for carousel arrows */
+        .carousel-control-prev-icon::before,
+        .carousel-control-next-icon::before {
+            color: #ffffff;
+        }
+        body {
+            background-color: #b33b3b;
+            color: #333333;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        .carousel-inner {
+            width: 80%;
+            margin: 0 auto;
+        }
+    </style>
+</head>
+<body>
+    <h1>Welcome to the Bulky Webpage!</h1>
+    <br>
+    <div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel" data-interval="5000">
+        <ol class="carousel-indicators">
+            <li data-target="#carouselExampleIndicators" data-slide-to="0" class="active"></li>
+            <li data-target="#carouselExampleIndicators" data-slide-to="1"></li>
+            <li data-target="#carouselExampleIndicators" data-slide-to="2"></li>
+        </ol>
+        <div class="carousel-inner">
+            <div class="carousel-item active">
+                <div class="content">
+                    <h2>Services</h2>
+                    <ul>
+                        <li>Service 1</li>
+                        <li>Service 2</li>
+                        <li>Service 3</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="carousel-item">
+                <canvas id="animationCanvas" width="400" height="40"></canvas>
+            </div>
+            <div class="carousel-item">
+                <div class="content">
+                    <h2>Contact Us</h2>
+                    <form>
+                        <label for="name">Name:</label>
+                        <input type="text" id="name" name="name" required><br><br>
+                        
+                        <label for="email">Email:</label>
+                        <input type="email" id="email" name="email" required><br><br>
+                        
+                        <label for="message">Message:</label><br>
+                        <textarea id="message" name="message" rows="4" cols="50" required></textarea><br><br>
+                        
+                        <input type="submit" value="Submit">
+                    </form>
+                </div>
+            </div>
+            <div class="carousel-item">
+                <div class="content">
+                    <h2>Gallery</h2>
+                    <img src="image1.jpg" alt="Image 1">
+                    <img src="image2.jpg" alt="Image 2">
+                    <img src="image3.jpg" alt="Image 3">
+                </div>
+            </div>
+        </div>
+        <a class="carousel-control-prev" href="#carouselExampleIndicators" role="button" data-slide="prev">
+            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+            <span class="sr-only">Previous</span>
+        </a>
+        <a class="carousel-control-next" href="#carouselExampleIndicators" role="button" data-slide="next">
+            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+            <span class="sr-only">Next</span>
+        </a>
+    </div>
+    
+    <!-- Include Bootstrap JS -->
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script>
+        // Get the canvas element
+        const canvas = document.getElementById('animationCanvas');
+        const ctx = canvas.getContext('2d');
+
+        // Ball properties
+        let x = canvas.width / 2;
+        let y = canvas.height / 2;
+        let radius = 20;
+        let dx = 2;
+        let dy = -2;
+        let color = '#ff0000';
+
+        function drawBall() {
+            // Clear the canvas
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            // Draw the ball
+            ctx.beginPath();
+            ctx.arc(x, y, radius, 0, Math.PI * 2);
+            ctx.fillStyle = color;
+            ctx.fill();
+            ctx.closePath();
+
+            // Update the ball position
+            x += dx;
+            y += dy;
+
+            // Change the ball color randomly
+            color = getRandomColor();
+
+            // Detect collision with the canvas edges
+            if (x + dx > canvas.width - radius || x + dx < radius) {
+                dx = -dx;
+            }
+            if (y + dy > canvas.height - radius || y + dy < radius) {
+                dy = -dy;
+            }
+
+            // Request the next animation frame
+            requestAnimationFrame(drawBall);
+        }
+
+        function getRandomColor() {
+            const letters = '0123456789ABCDEF';
+            let color = '#';
+            for (let i = 0; i < 6; i++) {
+                color += letters[Math.floor(Math.random() * 16)];
+            }
+            return color;
+        }
+
+        // Start the animation
+        drawBall();
+    </script>
+</body>
+</html>

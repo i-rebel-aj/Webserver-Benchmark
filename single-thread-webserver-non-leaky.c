@@ -26,6 +26,7 @@ char* get_html_page(){
     fseek(welcome_page, 0, SEEK_SET);
     fread(file_content, 1, size, welcome_page);
     file_content[size]='\0';
+    fclose(welcome_page);
     return file_content;
 }
 
@@ -51,6 +52,7 @@ void send_response(int _server_fd){
     const char *response_header = "HTTP/1.1 200 OK\r\nContent-Type: text/html\r\n\r\n";
     write(client_fd, response_header, strlen(response_header));
     write(client_fd, html_page, strlen(html_page));
+    free(html_page);
     close(client_fd);
 }
 
