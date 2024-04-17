@@ -1,3 +1,6 @@
+clean:
+	rm -rf ./out/*
 default:
-	gcc -g -Wall single-thread-webserver-leaky.c -o ./out/leaky-single
-	gcc -g -Wall single-thread-webserver-non-leaky.c -o ./out/non-leaky-single
+	gcc -c ./lib/server-helper.c -o ./out/server-helper.o
+	ar rcs ./out/libserver-helper.a ./out/server-helper.o
+	gcc -g -Wall -o ./out/leaky-single-thread -L./out/ single-thread-webserver-leaky.c -lserver-helper

@@ -45,10 +45,6 @@ void send_response(int _server_fd){
         perror("Request can not read to buffer\n");
     }
     char * html_page=get_html_page();
-    // char * response = malloc((strlen(html_page)+strlen(SUCCESS_RESPONSE)+1) * sizeof(char));
-    // strcat(response, SUCCESS_RESPONSE);
-    // strcat(response, html_page);
-    // printf("Response is %s\n size of response is %lu\n", response, strlen(response));
     const char *response_header = "HTTP/1.1 200 OK\r\nContent-Type: text/html\r\n\r\n";
     write(client_fd, response_header, strlen(response_header));
     write(client_fd, html_page, strlen(html_page));

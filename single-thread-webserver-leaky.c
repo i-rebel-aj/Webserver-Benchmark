@@ -6,45 +6,20 @@
 #include<signal.h>
 #include<pthread.h>
 #include <netinet/in.h>
+#include "server-helper.h"
 //Maximum Application Buffer
 /**
     Max Amount of memory from network (Request Size)
 */
 #define APP_MAX_BUFFER 1024
-#define PORT 3001
 #define MAX_BACKLOG_QUEUE_SIZE 10
-#define SUCCESS_RESPONSE "HTTP/1.1 200 OK\r\nContent-Type: text/html\r\n\0"
 
-
-char *get_file_name_from_route(char *route){
-    if(strcmp(route, "/")==0){
-        return "index.html";
-    }else if(strcmp(route, "/bulky-page")==0){
-        return "bulky-webpage.html";
-    }else{
-        return "404.html";
-    }
-}
-
-char* get_html_page(char *route){
-    FILE *welcome_page=fopen(get_file_name_from_route(route), "r");
-    char *file_content;
-    //Calculate Size of file
-    fseek(welcome_page, 0, SEEK_END);
-    long unsigned int size=ftell(welcome_page);
-    file_content=(char *)malloc(size+10);
-    fseek(welcome_page, 0, SEEK_SET);
-    fread(file_content, 1, size, welcome_page);
-    file_content[size]='\0';
-    return file_content;
-}
 
 void send_response(int _server_fd){
     struct sockaddr_in client_address;
     int clinet_address_len=sizeof(client_address);
-    //printf("Initial Client Address len is %d %d\n", clinet_address_len, client_address.sin_addr.s_addr);
     int client_fd=accept(_server_fd, (struct sockaddr *)&client_address, (socklen_t *)&clinet_address_len);
-    //printf("Client Address Post Connection is %d %d\n", clinet_address_len, client_address.sin_addr.s_addr);
+    
     if(client_fd==-1){
         perror("Accept Failed");
         exit(EXIT_FAILURE);
@@ -54,21 +29,25 @@ void send_response(int _server_fd){
         perror("Request can not read to buffer\n");
     }
     char request_path[1024];
-    sscanf(buffer, "GET %s HTTP", request_path);
-    printf("Request Path is %s\n", request_path);
+    
     char * html_page=get_html_page(request_path);
-    // char * response = malloc((strlen(html_page)+strlen(SUCCESS_RESPONSE)+1) * sizeof(char));
-    // strcat(response, SUCCESS_RESPONSE);
-    // strcat(response, html_page);
-    // printf("Response is %s\n size of response is %lu\n", response, strlen(response));
     const char *response_header = "HTTP/1.1 200 OK\r\nContent-Type: text/html\r\n\r\n";
     write(client_fd, response_header, strlen(response_header));
     write(client_fd, html_page, strlen(html_page));
     close(client_fd);
 }
 
-int main(){
-    
+int main(int argc, char **argv){
+
+    uint PORT;
+    if(argc < 2){
+        printf("Usage: %s <port>\n", argv[0]);
+        exit(EXIT_FAILURE);
+    }
+    if(sscanf(argv[1], "%u", &PORT) != 1){
+        printf("Invalid port number\n");
+        exit(EXIT_FAILURE);
+    }
     //Define socket address
     struct sockaddr_in server_address;
 
@@ -101,7 +80,7 @@ int main(){
         perror("Listen Failed");
         exit(EXIT_FAILURE);
     }
-    printf("Server running at PORT %d, press Ctrl+C to exit...\n", PORT);
+    printf("Server %s Running on PORT %d\nPress Ctrl+C to exit...\n", argv[2], PORT);
    
     while(1){
         printf("Waiting for connection\n");
