@@ -1,20 +1,28 @@
 #include<string.h>
 #include<stdio.h>
 #include<stdlib.h>
+#include <unistd.h>
 #include "./server-helper.h"
 
 char *get_file_name_from_route(char *route){
-    if(strcmp(route, "/")==0){
-        return "../html/index.html";
+    char *current_directory=malloc(sizeof(char)*1024);
+    if (getcwd(current_directory, 1024) == NULL) {
+        printf("Current working directory: %s\n", current_directory);
     }
-    return "../html/404.html";
+
+    if(strcmp(route, "/")==0){
+        strcat(current_directory, "/html/index.html");
+        return current_directory;
+    }
+    strcat(current_directory, "/404.html");
+    return current_directory;
 }
 
 void get_html_page(char *route, char **html_page ){
     FILE *welcome_page=fopen(get_file_name_from_route(route), "r");
     if(welcome_page==NULL){
         printf("The corresponding HTML file for route %s not found:\n", route);
-        char *empty_response="<html><body>Error opening corresponding file</body></html>";
+        char *empty_response="<html><body>Error opening corresponding file, are paths fine?</body></html>";
         *html_page=malloc(strlen(empty_response)+1);
         strcpy(*html_page, empty_response);
         return;
@@ -23,7 +31,7 @@ void get_html_page(char *route, char **html_page ){
     //Calculate Size of file
     fseek(welcome_page, 0, SEEK_END);
     long unsigned int size=ftell(welcome_page);
-    file_content=(char *)realloc(html_page,size+10);
+    file_content=(char *)realloc(*html_page,size+10);
     fseek(welcome_page, 0, SEEK_SET);
     fread(file_content, 1, size, welcome_page);
     file_content[size]='\0';
@@ -37,7 +45,6 @@ void get_response_of_request(struct HTTPServerResponse *response_obj, char* requ
     char method[10];
     char *route=malloc(strlen(request_buffer)+1);
     sscanf(request_buffer, "%9s %s", method, route);
-    printf("Method is %s", method);
     if(strcmp(method, "GET")!=0){
         char *response_headers="HTTP/1.1 404 Not Found\r\n";
         response_obj->response_headers=response_headers;
