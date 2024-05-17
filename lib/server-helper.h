@@ -13,6 +13,7 @@ struct HTTPServerResponse{
 struct HTTPServerRequest{
     char* http_method;
     char *route;
+    char *raw_buffer;
     //Can be extendend to include body etc
 };
 
@@ -24,5 +25,5 @@ void check(int status, char * error);
 /**
 Get Response of a request
 */
-void get_response_of_request(struct HTTPServerResponse *response_obj, char* request_buffer);
+void get_response_of_request(struct HTTPServerResponse *response_obj, struct HTTPServerRequest *request_obj );
 #endif

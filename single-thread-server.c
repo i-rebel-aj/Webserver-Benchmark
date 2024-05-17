@@ -26,20 +26,23 @@ void handle_request_on_server(int _server_fd){
     
     char request_buffer[APP_MAX_BUFFER]={0};
     if(read(client_fd, request_buffer, APP_MAX_BUFFER)==-1){
-        perror("Request can not read to buffer\n");
+        perror("Request can not read to max buffer\n");
     }
-    printf("Read Buffer is %s\n", request_buffer);
+    // printf("Read Buffer is %s\n", request_buffer);
     
     struct HTTPServerResponse *response=malloc(sizeof( struct HTTPServerResponse));
+    struct HTTPServerRequest *request=malloc(sizeof(struct HTTPServerRequest));
+    request->raw_buffer=request_buffer;
     
-    get_response_of_request(response, request_buffer);
+    get_response_of_request(response, request);
 
+    printf("\033[35m %s %s --- %d\n", request->http_method, request->route, response->status_code);
 
     write(client_fd, (*response).response_headers, strlen((*response).response_headers));
     write(client_fd, (*response).response, strlen((*response).response));
     
     free(response);
-    
+    free(request);
     close(client_fd);
 }
 
@@ -80,9 +83,9 @@ int main(int argc, char **argv){
     check(listen(server_fd,MAX_BACKLOG_QUEUE_SIZE ), "Listen Failed on server file descriptor");
     
     printf("Server %s Running on PORT %d\nPress Ctrl+C to exit...\n", argv[2], PORT);
-   
+
     while(1){
-        printf("Waiting for connection\n");
+        
         handle_request_on_server(server_fd);
     }
 
