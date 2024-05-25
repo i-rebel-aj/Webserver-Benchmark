@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>C Web Server Benchmarking Simulator</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            background-color: #f4f4f4;
+            color: #333;
+            margin: 0;
+            padding: 20px;
+        }
+
+        h1, h2, h3 {
+            color: #444;
+            text-align: center;
+        }
+
+        h1 {
+            margin-bottom: 20px;
+        }
+
+        h2 {
+            margin-bottom: 15px;
+        }
+
+        h3 {
+            margin-top: 25px;
+            margin-bottom: 10px;
+        }
+
+        ul {
+            list-style-type: disc;
+            padding-left: 20px;
+        }
+
+        p {
+            margin-bottom: 20px;
+            text-align: justify;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: #fff;
+            padding: 20px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Welcome to C Web Server Benchmarking Simulator</h1>
+        <h2>For First Leg, we will be analyzing a TCP Server with 3 flavors.</h2>
+        <ul>
+            <li>Single Threaded Server</li>
+            <li>Multithreaded Server</li>
+            <li>Event Loop Based Server</li>
+        </ul>
+        <p>There are 4 routes that I've built, each performing a different load on the server:</p>
+        <ul>
+            <li>IO Intensive</li>
+            <li>Compute Intensive</li>
+            <li>Sends a simple HTML Page</li>
+        </ul>
+        <p>Different web servers have different strategies on how they handle incoming traffic. These strategies can include single-threaded, multithreaded, or event-loop based approaches.</p>
+        <p>All the web servers are very rudimentary, written in C, to avoid benchmarking a server where optimizations by the framework or the programming language can pollute the results.</p>
+        <div>
+            <h3>Single Threaded Server</h3>
+            <!-- Add more content for the Single Threaded Server here if needed -->
+        </div>
+    </div>
+</body>
+</html>
