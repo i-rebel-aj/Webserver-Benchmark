@@ -1,0 +1,19 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Single Server",
+            "type": "cppdbg",
+            "request": "launch",
+            "program": "${workspaceFolder}/out/single-thread-server",
+            "args": [
+                "3003"
+            ],
+            "stopAtEntry": false,
+            "cwd": "${workspaceFolder}",
+            "environment": [],
+            "externalConsole": false,
+            "MIMode": "gdb",
+        }
+    ]
+}

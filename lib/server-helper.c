@@ -7,23 +7,21 @@
 /**
     This Returns Status code
 */
-int get_file_path_for_route(char *route, char *file_path){
-    file_path=realloc(file_path,sizeof(char)*1024);
-    if (getcwd(file_path, 1024) == NULL) {
-        printf("Current working directory: %s\n", file_path);
+int get_file_path_for_route(char *route, char **file_path){
+    if (getcwd(*file_path, 1024) == NULL) {
+        printf("Current working directory: %s\n", *file_path);
     }
-
     if(strcmp(route, "/")==0){
-        strcat(file_path, "/html/index.html");
+        strcat(*file_path, "/html/index.html");
         return 200;
     }
-    strcat(file_path, "/html/404.html");
+    strcat(*file_path, "/html/404.html");
     return 404;
 }
 
 int get_html_page(char *route, char **html_page ){
-    char *file_path=malloc(sizeof(char));
-    int status_code=get_file_path_for_route(route, file_path);
+    char *file_path=malloc(sizeof(char)*1024);
+    int status_code=get_file_path_for_route(route, &file_path);
     FILE *welcome_page=fopen(file_path, "r");
     if(welcome_page==NULL){
         printf("The corresponding HTML file for route %s not found:\n", route);
@@ -42,6 +40,7 @@ int get_html_page(char *route, char **html_page ){
     file_content[size]='\0';
     *html_page=malloc(strlen(file_content)+1);
     strcpy(*html_page, file_content);
+    free(file_path);
     return status_code;
     
 }
