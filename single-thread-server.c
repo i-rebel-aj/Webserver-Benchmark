@@ -58,22 +58,6 @@ void handle_request_on_server(int _server_fd){
         "Error Writing To client",
         false
     );
-
-    if (write(client_fd, response->response_headers, strlen(response->response_headers)) == -1) {
-        if (errno == EPIPE) {
-            printf("Client closed connection (SIGPIPE)\n");
-        } else {
-            perror("Write error");
-        }
-    }
-    
-    if (write(client_fd, response->response, strlen(response->response)) == -1) {
-        if (errno == EPIPE) {
-            printf("Client closed connection (SIGPIPE)\n");
-        } else {
-            perror("Write error");
-        }
-    }
     
     free(response);
     free(request);
