@@ -3,6 +3,7 @@
 #include<string.h>
 #include<stdio.h>
 #include<stdlib.h>
+#include <stdbool.h>
 
 struct HTTPServerResponse{
     int status_code;
@@ -20,7 +21,7 @@ struct HTTPServerRequest{
 /**
 Check Method
 */
-void check(int status, char * error);
+void check(int status, char * error, bool force_exit);
 
 /**
 Get Response of a request

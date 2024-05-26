@@ -2,6 +2,7 @@
 #include<stdio.h>
 #include<stdlib.h>
 #include <unistd.h>
+#include <stdbool.h>
 #include "./server-helper.h"
 
 /**
@@ -76,9 +77,12 @@ void get_response_of_request(struct HTTPServerResponse *response_obj, struct HTT
 }
 
 
-void check(int ex, char *error){
+void check(int ex, char *error, bool force_exit){
     if(ex<0){
+        printf("\033[0;31mError Came While listening to socket %d %s\n\033[0m\n", ex, error);
         perror(error);
-        exit(EXIT_FAILURE);
+        if(force_exit){
+            exit(EXIT_FAILURE);
+        }
     }
 }

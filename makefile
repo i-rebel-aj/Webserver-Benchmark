@@ -12,3 +12,5 @@ debug:
 	make clean
 	make build
 	gdb ./out/single-thread-server
+run:
+	./out/single-thread-server 3003
